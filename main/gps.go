@@ -1134,7 +1134,7 @@ func processNMEALineLow(l string, fakeGpsTimeToCurr bool) (sentenceUsed bool) {
 	mySituation.GPSLastValidNMEAMessageTime = stratuxClock.Time
 	mySituation.GPSLastValidNMEAMessage = l
 
-	if (x[0] == "GNVTG") || (x[0] == "GPVTG") { // Ground track information.
+	if (x[if strings.HasSuffix(x[0], "VTG") { // Ground track information.
 		tmpSituation := mySituation // If we decide to not use the data in this message, then don't make incomplete changes in mySituation.
 		if len(x) < 9 {             // Reduce from 10 to 9 to allow parsing by devices pre-NMEA v2.3
 			return false
@@ -1165,7 +1165,7 @@ func processNMEALineLow(l string, fakeGpsTimeToCurr bool) (sentenceUsed bool) {
 		mySituation = tmpSituation
 		return true
 
-	} else if (x[0] == "GNGGA") || (x[0] == "GPGGA") { // Position fix.
+	 } else if strings.HasSuffix(x[0], "GGA") { // Position fix.
 		tmpSituation := mySituation // If we decide to not use the data in this message, then don't make incomplete changes in mySituation.
 
 		if len(x) < 15 {
@@ -1268,7 +1268,7 @@ func processNMEALineLow(l string, fakeGpsTimeToCurr bool) (sentenceUsed bool) {
 
 		return true
 
-	} else if (x[0] == "GNRMC") || (x[0] == "GPRMC") { // Recommended Minimum data.
+	} else if strings.HasSuffix(x[0], "RMC") { // Recommended Minimum data.
 		tmpSituation := mySituation // If we decide to not use the data in this message, then don't make incomplete changes in mySituation.
 
 		//$GPRMC,123519,A,4807.038,N,01131.000,E,022.4,084.4,230394,003.1,W*6A
@@ -1419,7 +1419,7 @@ func processNMEALineLow(l string, fakeGpsTimeToCurr bool) (sentenceUsed bool) {
 		setDataLogTimeWithGPS(mySituation)
 		return true
 
-	} else if (x[0] == "GNGSA") || (x[0] == "GPGSA") { // Satellite data.
+	} else if strings.HasSuffix(x[0], "GSA") { // Satellite data.
 		tmpSituation := mySituation // If we decide to not use the data in this message, then don't make incomplete changes in mySituation.
 
 		if len(x) < 18 {
